@@ -49,8 +49,8 @@ sub event {
 		if ($info->{type} eq 'directory') {
 			$self->{handles}->{$path} = Gnome2::VFS::Monitor->add($path, 'directory', sub { $self->event(@_) });
 
-		} else {
-			$Aegis::Scanner->scan($path);
+		} elsif ($Aegis::Config->get_bool("$Aegis::Config::Dir/enabled")) {
+			$Aegis::Scanner->scan_file($path);
 
 		}
 

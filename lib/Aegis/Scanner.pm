@@ -3,14 +3,17 @@ package Aegis::Scanner;
 use base qw(File::Scan);
 use strict;
 
-sub scan {
+sub scan_file {
 	my ($self, $file) = @_;
 
-	if ($Aegis::Config->get_bool("$Aegis::Config::Dir/enabled")) {
-		Aegis::UI->report_scan($file);
+	$Aegis::UI->report_scan($file);
 
-		if (-e $file) {
-			my $virus = $self->SUPER::scan($file);
+	if (-e $file) {
+		if (!-r $file) {
+			$Aegis::UI->report_error($file, "Read access denied.");
+
+		} else {
+			my $virus = $self->scan($file);
 			if ($virus ne '') {
 				$Aegis::UI->report_virus($file, $virus);
 
@@ -21,7 +24,11 @@ sub scan {
 				$Aegis::UI->report_suspicious($file);
 
 			}
+
 		}
+
+	} else {
+		$Aegis::UI->report_error($file, "Non-existent file");
 
 	}
 
