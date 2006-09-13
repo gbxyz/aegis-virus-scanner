@@ -26,10 +26,6 @@ sub scan_file {
 			}
 
 		}
-
-	} else {
-		$Aegis::UI->report_error($file, "Non-existent file");
-
 	}
 
 	return 1;
