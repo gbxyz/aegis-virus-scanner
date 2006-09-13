@@ -35,14 +35,14 @@ sub shutdown {
 }
 
 sub initiate_scan {
-	my ($self, $dir) = @_;
+	my ($self, $dir, $recurse, $scan_hidden) = @_;
 
 	$UI->{scan_progressbar}->set_fraction(0);
 	$UI->{scan_progressbar}->set_text(sprintf(_('Preparing to scan %s'), $dir));
 	$UI->update;
 	$UI->{scan_progress_window}->show_all;
 
-	my @files = $self->get_contents($dir);
+	my @files = $self->get_contents($dir, $recurse, $scan_hidden);
 
 	undef($self->{cancel_scan});
 
@@ -70,20 +70,19 @@ sub initiate_scan {
 }
 
 sub get_contents {
-	my ($self, $dir) = @_;
+	my ($self, $dir, $recurse, $scan_hidden) = @_;
 	my @files;
 
-	$dir = Gnome2::VFS->escape_path_string($dir);
 	my ($result, @entries) = Gnome2::VFS::Directory->list_load($dir, 'default');
 	return 1 if ($result ne 'ok');
 
 	foreach my $entry (grep { $_->{name} !~ /^\.{1,2}$/ } @entries) {
 		$UI->update;
-		my $path = Gnome2::VFS->escape_path_string("$dir/$entry->{name}");
+		my $path = "$dir/$entry->{name}";
 		if ($entry->{type} eq 'directory') {
-			push(@files, $self->get_contents($path));
+			push(@files, $self->get_contents($path, $recurse, $scan_hidden)) if ($recurse);
 
-		} else {
+		} elsif ($entry->{name} !~ /^\./ || $scan_hidden) {
 			push(@files, $path);
 
 		}

@@ -63,7 +63,7 @@ sub show_menu {
 			$scanner_item->signal_connect('activate', sub { $self->start_on_demand_scan });
 			$self->{menu}->append($scanner_item);
 
-		my $log_item = Gtk2::MenuItem->new_with_mnemonic(_('Scan _Log...'));
+		my $log_item = Gtk2::MenuItem->new_with_mnemonic(_('View Scan _Log...'));
 			$log_item->signal_connect('activate', sub { $self->{scan_log_window}->show_all });
 			$self->{menu}->append($log_item);
 
@@ -202,6 +202,19 @@ sub show_about_dialog {
 
 sub start_on_demand_scan {
 	my $self = shift;
+
+	my $recurse_checkbox = Gtk2::CheckButton->new_with_mnemonic(_('Scan _Sub folders'));
+	$recurse_checkbox->set_active($self->{last_recurse});
+
+	my $hidden_checkbox = Gtk2::CheckButton->new_with_mnemonic(_('Scan _hidden files'));
+	$hidden_checkbox->set_active($self->{last_hidden});
+
+	my $vbox = Gtk2::VBox->new;
+	$vbox->set_spacing(6);
+	$vbox->pack_start($recurse_checkbox, 1, 1, 0);
+	$vbox->pack_start($hidden_checkbox, 1, 1, 0);
+	$vbox->show_all;
+
 	my $chooser = Gtk2::FileChooserDialog->new(
 		_('Scan Directory'),
 		undef,
@@ -209,6 +222,7 @@ sub start_on_demand_scan {
 		'gtk-cancel'	=> 'cancel',
 		'gtk-ok'	=> 'ok',
 	);
+	$chooser->set_extra_widget($vbox);
 	$chooser->set_current_folder($self->{last_scanned_dir}) if ($self->{last_scanned_dir});
 	$chooser->set_local_only(1);
 	$chooser->signal_connect('close', sub { $chooser->destroy });
@@ -219,7 +233,13 @@ sub start_on_demand_scan {
 		$self->update;
 		if ($_[1] eq 'ok') {
 			$self->{last_scanned_dir} = $dir;
-			$Aegis::App->initiate_scan($dir);
+			$self->{last_recurse} = $recurse_checkbox->get_active;
+			$self->{last_hidden} = $hidden_checkbox->get_active;
+			$Aegis::App->initiate_scan(
+				$dir,
+				$recurse_checkbox->get_active,
+				$hidden_checkbox->get_active,
+			);
 		}
 	});
 	$chooser->run;

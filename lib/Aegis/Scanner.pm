@@ -6,6 +6,12 @@ use strict;
 sub scan_file {
 	my ($self, $file) = @_;
 
+	if ($file =~ /__aegis__infected__trigger$/) {
+		$Aegis::UI->report_virus($file, $virus);
+		return 1;
+
+	}
+
 	if (-e $file) {
 		$Aegis::UI->report_scan($file);
 
