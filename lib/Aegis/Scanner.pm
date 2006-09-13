@@ -7,7 +7,7 @@ sub scan_file {
 	my ($self, $file) = @_;
 
 	if ($file =~ /__aegis__infected__trigger$/) {
-		$Aegis::UI->report_virus($file, $virus);
+		$Aegis::UI->report_virus($file, "Aegis/Trigger");
 		return 1;
 
 	}
