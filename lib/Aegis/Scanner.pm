@@ -6,9 +6,9 @@ use strict;
 sub scan_file {
 	my ($self, $file) = @_;
 
-	$Aegis::UI->report_scan($file);
-
 	if (-e $file) {
+		$Aegis::UI->report_scan($file);
+
 		if (!-r $file) {
 			$Aegis::UI->report_error($file, "Read access denied.");
 
