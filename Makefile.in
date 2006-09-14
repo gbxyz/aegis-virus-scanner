@@ -1,0 +1,27 @@
+# Makefile for aegis.
+# $Id: Makefile.in,v 1.10 2005/09/22 15:42:08 jodrell Exp $
+
+prefix=@PREFIX@
+name=aegis-virus-scanner
+
+all: build
+
+build:
+	perl -ne 's!\@PREFIX\@!$(prefix)!g ; print' < src/aegis.pl > $(name)
+
+install:
+	mkdir -p	$(prefix)/share/$(name) \
+			$(prefix)/share/$(name)/lib \
+			$(prefix)/share/$(name)/share \
+			$(prefix)/share/icons/hicolor/48x48/apps \
+			$(prefix)/share/applications \
+			$(prefix)/bin
+
+	install	-m 0755 $(name) $(prefix)/bin/
+	install -m 0644 share/$(name).png $(prefix)/share/icons/hicolor/48x48/apps/
+	install -m 0644 share/$(name).glade $(prefix)/share/$(name)/share/
+	install -m 0644 share/$(name).desktop $(prefix)/share/applications/
+	cp -Rp lib/* $(prefix)/share/$(name)/lib/
+
+clean:
+	rm -f Makefile $(name)

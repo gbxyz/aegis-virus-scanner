@@ -13,7 +13,7 @@ sub new {
 
 	Gtk2->init;
 
-	my $self = $package->SUPER::new(sprintf('%s/share/aegis.glade', $Aegis::Prefix));
+	my $self = $package->SUPER::new(sprintf('%s/share/%s.glade', $Aegis::Prefix, $Aegis::Alias));
 
 	$self->{scanlog} = Gtk2::Ex::Simple::List->new_from_treeview(
 		$self->{scan_log_view},

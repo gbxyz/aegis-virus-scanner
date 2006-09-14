@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Exec=aegis-virus-scanner
+TryExec=
+X-GNOME-DocPath=
+Terminal=false
+StartupNotify=true
+Name=Virus Scanner
+Name[en_GB]=Virus Scanner
+Comment=Scan your computer for viruses
+Comment[en_GB]=Scan your computer for viruses
+Icon=aegis-virus-scanner
+Categories=GNOME;Application;Utility;X-Red-Hat-Base;

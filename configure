@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+# simple configure script for aegis
+# $Id: configure,v 1.2 2004/03/13 15:56:22 jodrell Exp $
+use strict;
+use Getopt::Long;
+
+my ($help, $prefix);
+GetOptions('help' => \$help, 'prefix=s' => \$prefix);
+
+if (defined($help)) {
+	print <<"END";
+Usage: configure [options]
+Options:
+  --help                  print this message
+  --prefix=DIR            installation destination (will use
+                          `pkg-config gtk+-2.0 --variable=prefix` by default)
+END
+} else {
+	if (!defined($prefix)) {
+		chomp($prefix = `pkg-config gtk+-2.0 --variable=prefix`);
+	}
+	printf("Configuration options:\n    prefix: %s\nWriting Makefile...\n", $prefix);
+	open(SRC, 'Makefile.in');
+	open(DST, '>Makefile');
+	while (<SRC>) {
+		s/\@PREFIX\@/$prefix/g;
+		print DST $_;
+	}
+	close(SRC);
+	close(DST);
+	print "Now type 'make' to build.\n";
+}
