@@ -204,7 +204,7 @@ sub show_about_dialog {
 sub start_on_demand_scan {
 	my $self = shift;
 
-	my $recurse_checkbox = Gtk2::CheckButton->new_with_mnemonic(_('Scan _Sub folders'));
+	my $recurse_checkbox = Gtk2::CheckButton->new_with_mnemonic(_('Scan _sub folders'));
 	$recurse_checkbox->set_active($self->{last_recurse});
 
 	my $hidden_checkbox = Gtk2::CheckButton->new_with_mnemonic(_('Scan _hidden files'));

@@ -6,30 +6,32 @@ use Aegis::Scanner;
 use Aegis::UI;
 use Aegis::I18N;
 use File::Basename qw(basename);
-use vars qw($Name $FullName $Alias $App $Prefix $$Config $Monitor $Scanner $UI $Quarantine);
+use vars qw($Name $FullName $Alias $App $Prefix $Config $Monitor $Scanner $UI $Quarantine);
 use strict;
 
 BEGIN {
-	our $Name	= __PACKAGE__;
-	our $FullName	= sprintf('%s Virus Scanner', $Name);
-	our $Alias	= lc($FullName);
+	our $Name		= __PACKAGE__;
+	our $FullName		= sprintf('%s Virus Scanner', $Name);
+	our $Alias		= lc($FullName);
 	$Alias =~ s/\s/-/g;
-	our $Prefix	= $ENV{PWD};
+	our $Prefix		= $ENV{PWD};
 }
 
 our $App = Aegis->new;
 
 sub new {
 	Aegis::Config->init;
-	our $Quarantine	= sprintf(_('%s/QUARANTINE'), Glib::get_home_dir);
-	our $Monitor	= Aegis::Monitor->new;
-	our $Scanner	= Aegis::Scanner->new;
-	our $UI		= Aegis::UI->new;
+	our $Quarantine		= sprintf(_('%s/QUARANTINE'), Glib::get_home_dir);
+	our $Monitor		= Aegis::Monitor->new;
+	our $Scanner		= Aegis::Scanner->new;
+	our $UI			= Aegis::UI->new;
 
 	return bless({}, shift);
 }
 
 sub shutdown {
+	my $self = shift;
+	$Scanner->shutdown;
 	Gtk2->main_quit;
 	exit;
 }
@@ -78,12 +80,15 @@ sub get_contents {
 
 	foreach my $entry (grep { $_->{name} !~ /^\.{1,2}$/ } @entries) {
 		$UI->update;
-		my $path = "$dir/$entry->{name}";
-		if ($entry->{type} eq 'directory') {
-			push(@files, $self->get_contents($path, $recurse, $scan_hidden)) if ($recurse);
+		if ($entry->{name} !~ /^\./ || $scan_hidden) {
+			my $path = "$dir/$entry->{name}";
+			if ($entry->{type} eq 'directory') {
+				push(@files, $self->get_contents($path, $recurse, $scan_hidden)) if ($recurse);
 
-		} elsif ($entry->{name} !~ /^\./ || $scan_hidden) {
-			push(@files, $path);
+			} else {
+				push(@files, $path);
+
+			}
 
 		}
 	}

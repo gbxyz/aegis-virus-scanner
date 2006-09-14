@@ -3,16 +3,23 @@ package Aegis::Monitor;
 use Gnome2::VFS;
 use strict;
 
-BEGIN {
-	Gnome2::VFS->init;
-}
-
 sub new {
 	my $self = bless({}, shift);
+
+	Gnome2::VFS->init;
+
 	my $dir = $Aegis::Config->get_string("$Aegis::Config::Dir/dir");
+
 	$Aegis::Config->notify_add("$Aegis::Config::Dir/dir", sub {
+		use Data::Dumper;
+		print Dumper(\@_);
+		map { $_->cancel } values(%{$self->{handles}});
+		$self->{handles} = {};
 	});
+
 	$self->set_watch_on($dir);
+
+	return $self;
 }
 
 sub set_watch_on {
