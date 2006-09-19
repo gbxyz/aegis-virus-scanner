@@ -8,6 +8,8 @@ use strict;
 sub new {
 	my $self = bless({}, shift);
 
+	Gnome2::VFS->init;
+
 	our $WorkingDir = sprintf('%s/.%s', Glib::get_home_dir, lc($Aegis::Name));
 	Gnome2::VFS->make_directory($WorkingDir, 0700);
 

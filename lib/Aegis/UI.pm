@@ -13,7 +13,7 @@ sub new {
 
 	Gtk2->init;
 
-	my $self = $package->SUPER::new(sprintf('%s/share/%s.glade', $Aegis::Prefix, $Aegis::Alias));
+	my $self = $package->SUPER::new(sprintf('%s/share/%s/share/%s.glade', $Aegis::Prefix, $Aegis::Alias, $Aegis::Alias));
 
 	$self->{scanlog} = Gtk2::Ex::Simple::List->new_from_treeview(
 		$self->{scan_log_view},
@@ -27,7 +27,7 @@ sub new {
 	$self->{tips} = Gtk2::Tooltips->new;
 
 	$self->{theme} = Gtk2::IconTheme->get_default;
-	$self->{theme}->prepend_search_path(sprintf('%s/share', $Aegis::Prefix));
+	$self->{theme}->prepend_search_path(sprintf('%s/share/icons', $Aegis::Prefix));
 
 	$self->{icon} = Gtk2::TrayIcon->new($Aegis::Name);
 	$self->{icon}->add(Gtk2::EventBox->new);
@@ -52,7 +52,7 @@ sub show_menu {
 	if (!defined($self->{menu})) {
 		$self->{menu} = Gtk2::Menu->new;
 
-		my $enabled_item = Gtk2::CheckMenuItem->new_with_mnemonic(_('Background Scanner _Enabled'));
+		my $enabled_item = Gtk2::CheckMenuItem->new_with_mnemonic(_('Background Scan'));
 			$enabled_item->set_active($Aegis::Config->get_bool("$Aegis::Config::Dir/enabled"));
 			$enabled_item->signal_connect('toggled', sub { $Aegis::Config->set_bool("$Aegis::Config::Dir/enabled", $enabled_item->get_active) });
 			$Aegis::Config->notify_add("$Aegis::Config::Dir/enabled", sub { $enabled_item->set_active($Aegis::Config->get_bool("$Aegis::Config::Dir/enabled")) });

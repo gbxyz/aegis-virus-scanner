@@ -18,8 +18,8 @@ install:
 			$(prefix)/bin
 
 	install	-m 0755 $(name) $(prefix)/bin/
-	install -m 0644 share/$(name).png $(prefix)/share/icons/hicolor/48x48/apps/
-	install -m 0644 share/$(name).glade $(prefix)/share/$(name)/share/
+	install -m 0644 share/icons/$(name).png $(prefix)/share/icons/hicolor/48x48/apps/
+	install -m 0644 share/$(name)/share/$(name).glade $(prefix)/share/$(name)/share/
 	install -m 0644 share/$(name).desktop $(prefix)/share/applications/
 	cp -Rp lib/* $(prefix)/share/$(name)/lib/
 

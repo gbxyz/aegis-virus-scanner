@@ -9,24 +9,20 @@ use File::Basename qw(basename);
 use vars qw($Name $FullName $Alias $App $Prefix $Config $Monitor $Scanner $UI $Quarantine);
 use strict;
 
-BEGIN {
-	our $Name		= __PACKAGE__;
+sub new {
+	my $package		= shift;
+	our $Name		= $package;
 	our $FullName		= sprintf('%s Virus Scanner', $Name);
 	our $Alias		= lc($FullName);
 	$Alias =~ s/\s/-/g;
-	our $Prefix		= $ENV{PWD};
-}
-
-our $App = Aegis->new;
-
-sub new {
-	Aegis::Config->init;
 	our $Quarantine		= sprintf(_('%s/QUARANTINE'), Glib::get_home_dir);
-	our $Monitor		= Aegis::Monitor->new;
+
+	Aegis::Config->init;
 	our $Scanner		= Aegis::Scanner->new;
 	our $UI			= Aegis::UI->new;
+	our $Monitor		= Aegis::Monitor->new;
 
-	return bless({}, shift);
+	return bless({}, $package);
 }
 
 sub shutdown {
