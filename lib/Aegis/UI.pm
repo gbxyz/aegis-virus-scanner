@@ -143,6 +143,7 @@ sub report_virus {
 	$self->{virus_detected_dialog_virus_label}->set_markup(sprintf('<big><b>%s</b></big>', encode_entities_numeric($virus)));
 	$self->{virus_detected_dialog}->set_urgency_hint(1);
 	$self->{virus_detected_dialog}->present;
+	$self->{virus_detected_dialog}->window->raise;
 	$self->{virus_detected_dialog}->run;
 	return 1;
 }

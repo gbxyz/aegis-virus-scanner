@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 # $Id$
-use Gtk2;
 use strict;
 
 my $PREFIX = (-e '@PREFIX@' ? '@PREFIX@' : $ENV{PWD});
