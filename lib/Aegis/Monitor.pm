@@ -11,8 +11,6 @@ sub new {
 	my $dir = $Aegis::Config->get_string("$Aegis::Config::Dir/dir");
 
 	$Aegis::Config->notify_add("$Aegis::Config::Dir/dir", sub {
-		use Data::Dumper;
-		print Dumper(\@_);
 		map { $_->cancel } values(%{$self->{handles}});
 		$self->{handles} = {};
 	});

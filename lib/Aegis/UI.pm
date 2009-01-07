@@ -192,9 +192,9 @@ sub show_about_dialog {
 	my $self = shift;
 	Gtk2->show_about_dialog(
 		$self->{main_window},
-		name		=> $Aegis::FullName,
+		program_name	=> $Aegis::FullName,
 		version		=> $Aegis::Version,
-		copyright	=> _('Copyright 2006 Gavin Brown'),
+		copyright	=> _('Copyright 2009 Gavin Brown'),
 		website		=> 'http://jodrell.net/projects/aegis',
 		logo_icon_name	=> 'aegis-virus-scanner',
 		icon_name	=> 'aegis-virus-scanner',

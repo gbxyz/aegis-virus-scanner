@@ -12,7 +12,7 @@ if ($@) {
 	exit 1;
 }
 
-$Aegis::Version = '2.0.0';
+$Aegis::Version = '2.0.1';
 $Aegis::Prefix	= $PREFIX;
 $Aegis::App	= Aegis->new;
 
